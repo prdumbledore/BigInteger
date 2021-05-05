@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19)
 project(BigInteger C)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 99)
 
 add_executable(BigInteger main.c BigInteger.h BigInteger.c Digits.c Digits.h)

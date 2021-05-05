@@ -3,11 +3,13 @@
 
 #include "Digits.h"
 
+#define BigInteger BigInteger
+
 typedef enum {positive = 0, negative = 1} Sign;
 
 typedef struct {
-    Sign sign;
     Digits *digits;
+    Sign sign;
 } BigInteger;
 
 typedef struct MultiplicationTable {
@@ -32,6 +34,6 @@ bool bintGreaterThan(BigInteger a, BigInteger b);   /* true if a > b */
 bool bintLesserThan(BigInteger a, BigInteger b);    /* true if a < b */
 bool isZero(BigInteger);
 
-BigInteger bintCpy(BigInteger);                /*copies a given integer to a new memory location, does not delete the old one*/
-void freeBint(BigInteger);               /*free allocated memory for big integer*/
+BigInteger bintCpy(BigInteger);
+void freeBint(BigInteger);
 #endif

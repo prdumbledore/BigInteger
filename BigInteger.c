@@ -11,7 +11,7 @@ char* intToString(int);
 
 // Копирование числа
 BigInteger bintCpy(BigInteger source) {
-    return (BigInteger) {(Sign) digitsCpy(source.digits), (Digits *) source.sign};
+    return (BigInteger) { digitsCpy(source.digits), source.sign};
 }
 
 // Представление листа с цифрами в виде числа
@@ -105,7 +105,7 @@ BigInteger bintAdd(BigInteger a, BigInteger b) {
 // Операция вычитания
 BigInteger bintSub(BigInteger a, BigInteger b) {
     int i=0;
-    BigInteger result = {(Sign) createDigits(0), 0};
+    BigInteger result = { createDigits(0), 0};
     if (!a.digits || !b.digits)
         return stringToBint("0");
     if (a.sign != b.sign) {
@@ -115,7 +115,7 @@ BigInteger bintSub(BigInteger a, BigInteger b) {
     if (bintEqual(a, b))
         return stringToBint("0");
 
-    if (bintGreaterThan((BigInteger) {(Sign) a.digits, (Digits *) positive}, (BigInteger) {(Sign) b.digits, (Digits *) positive})) {
+    if (bintGreaterThan((BigInteger) { a.digits,  positive}, (BigInteger) { b.digits, positive})) {
         bool carry = false;
         Node *head1 = a.digits->HEAD, *head2 = b.digits->HEAD, *curr;
         Digits *reversed;
@@ -164,7 +164,7 @@ BigInteger bintMul(BigInteger a, BigInteger b) {
         return stringToBint("0");
     Sign s = divMultSign(a.sign, b.sign);
     MultiplicationTable  t = getTable(a);
-    BigInteger result = {(Sign) createDigits(0), (Digits *) s};
+    BigInteger result = { createDigits(0),  s};
     int i;
 
     for (i = 0; i < b.digits->count; i++) {
@@ -191,7 +191,7 @@ BigInteger bintDiv(BigInteger a, BigInteger b) {
         return stringToBint("0");
     if (isZero(b))
         return intToBint(0);
-    if (bintGreaterThan((BigInteger) {(Sign) b.digits, (Digits *) positive}, (BigInteger) {(Sign) a.digits, (Digits *) positive}))
+    if (bintGreaterThan((BigInteger) { b.digits,  positive}, (BigInteger) { a.digits,  positive}))
         return intToBint(0);
     return doDivision(a, b, 1);
 }
@@ -214,7 +214,7 @@ BigInteger doDivision(BigInteger a, BigInteger b, bool div) {
     Sign bs = b.sign;
     int i;
     unsigned difference=1;
-    BigInteger tmp_a = {(Sign) digitsCpy(a.digits), (Digits *) positive}, sub_final, ten_laipsnis, ten,
+    BigInteger tmp_a = {digitsCpy(a.digits), positive}, sub_final, ten_laipsnis, ten,
             freeable, result, tmp2, j, vienas = intToBint(1);
     if (isZero(a))
         return intToBint(0);
@@ -258,16 +258,16 @@ BigInteger doDivision(BigInteger a, BigInteger b, bool div) {
     freeable = result;
     BigInteger freeable_2 = bintDiv(tmp_a, b);
     result = bintAdd(freeable_2, result);
-    freeBint(freeable_2);
-    freeBint(freeable);
-    freeBint(ten);
-    freeBint(vienas);
-    freeBint(j);
-    freeBint(sub_final);
-    freeBint(ten_laipsnis);
     if (div) {
         freeBint(tmp_a);
         result.sign = a.sign == bs || isZero(j) ? positive : negative;
+        freeBint(freeable_2);
+        freeBint(freeable);
+        freeBint(ten);
+        freeBint(vienas);
+        freeBint(j);
+        freeBint(sub_final);
+        freeBint(ten_laipsnis);
         return result;
     }
     else {
@@ -280,6 +280,12 @@ BigInteger doDivision(BigInteger a, BigInteger b, bool div) {
         if ( (a.sign != bs && bs == positive && !isZero(tmp_a)) || (a.sign == bs && bs == negative))
             tmp_a.sign = negative;
         freeBint(result);
+        freeBint(freeable_2);
+        freeBint(ten);
+        freeBint(vienas);
+        freeBint(j);
+        freeBint(sub_final);
+        freeBint(ten_laipsnis);
         return tmp_a;
     }
 }
@@ -389,11 +395,11 @@ bool bintLesserThan(BigInteger a, BigInteger b) {
 char* intToString(int a) {
     int tmp = a, digits=0, i, iki;
     bool negative = a < 0;
-    unsigned char *arr;
+    char *arr;
     if (a == 0) {
         arr = calloc(2, 1);
         arr[0] = '0';
-        return (char *) arr;
+        return arr;
     }
     while (tmp) {
         tmp /= 10;
@@ -408,13 +414,13 @@ char* intToString(int a) {
         arr[0] = '-';
     }
     for (; i>=iki; i--) {
-        unsigned char final = (unsigned char) tmp % 10;
+        char final = (char) ((char) tmp % 10);
         if (negative)
             final *= -1;
-        arr[i] = (unsigned char) final + 0x30;
+        arr[i] = (char) ((char) final + 0x30);
         tmp /= 10;
     }
-    return (char *) arr;
+    return arr;
 }
 
 // освобождение памяти от числа
@@ -425,7 +431,7 @@ void freeBint(BigInteger a) {
 // int в BigInteger
 BigInteger intToBint(int a) {
     char *tmp = intToString(abs(a));
-    BigInteger result = {(Sign) stringToDigits(tmp), (Digits *) (a < 0 ? negative : positive)};
+    BigInteger result = {stringToDigits(tmp), a < 0 ? negative : positive};
     free(tmp);
     return result;
 }

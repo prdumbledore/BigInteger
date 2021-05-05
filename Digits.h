@@ -29,7 +29,7 @@ char popFront(Digits*);
 
 Digits* stringToDigits(char*);
 char* digitsToString(Digits*, char);
-void printDigits(Digits);
+
 Digits* createDigits(unsigned int size);
 
 Digits* digitsCpy(Digits*);

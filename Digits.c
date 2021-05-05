@@ -3,6 +3,7 @@
 #include "stdio.h"
 #include "string.h"
 
+// Создание листа цифр
 Digits* createDigits(unsigned size) {
     Digits *l = calloc(1, sizeof(Digits));
     if (l == NULL)
@@ -14,6 +15,7 @@ Digits* createDigits(unsigned size) {
     return l;
 }
 
+// Строка в лист цифр
 Digits* stringToDigits(char *str) {
     Digits *l = createDigits(0);
     int len = (int ) strlen(str), i;
@@ -27,6 +29,7 @@ Digits* stringToDigits(char *str) {
     return l;
 }
 
+// Копия листа цифр
 Digits* digitsCpy(Digits *original) {
     Digits *newDigits = createDigits(0);
     Node *head = original->HEAD;
@@ -37,6 +40,7 @@ Digits* digitsCpy(Digits *original) {
     return newDigits;
 }
 
+// Запись следующей цифры в листе цифр слева
 Errors pushFront(Digits *digits, char data) {
     Node *new = malloc(sizeof(Node));
     if (new == NULL)
@@ -48,17 +52,19 @@ Errors pushFront(Digits *digits, char data) {
     return NO_EXCEPTION;
 }
 
+// Запись следующей цифры в листе цифр справа
 Errors pushBack(Digits *digits, char data) {
     Node **Head = &(digits->HEAD);
     while (*Head)
         Head = &(*Head)->next;
     *Head = malloc(sizeof(**Head));
     (*Head)->data = data;
-    (*Head)->data = 0;
+    (*Head)->next = NULL;
     digits->count++;
     return NO_EXCEPTION;
 }
 
+// Удаление цифры в листе цифр слева направо
 char popFront(Digits *digits) {
     Node *tmp = digits->HEAD;
     char value;
@@ -71,6 +77,7 @@ char popFront(Digits *digits) {
     return value;
 }
 
+// Поиск по индексу
 Node* getByIndex(Digits *digits, unsigned index) {
     Node* result = digits->HEAD;
     int i = 0;
@@ -85,6 +92,7 @@ Node* getByIndex(Digits *digits, unsigned index) {
     return result;
 }
 
+// Список цифр в строку
 char* digitsToString (Digits *digits, char optional) {
     char *str;
     int i = 0;
@@ -110,6 +118,7 @@ char* digitsToString (Digits *digits, char optional) {
     return str;
 }
 
+// Освобождение выделенной памяти для списка цифр
 void freeDigits(Digits *digits) {
     Node *head = digits->HEAD, *tmp = NULL;
     while (head) {
@@ -120,21 +129,25 @@ void freeDigits(Digits *digits) {
     free(digits);
 }
 
+// Проверка исключения, вывод кода ошибки
 void checkErrors(Errors code)  {
     if (code)
         exit(code);
 }
 
+// Выборка длинного числа
 Digits* getLonger(Digits *a, Digits *b, int *length) {
     *length = MAX(a->count, b->count);
     return (a->count == *length) ? a : b;
 }
 
+// Выборка короткого числа
 Digits* getShorter(Digits *a, Digits *b, int *length) {
     *length = MIN(a->count, b->count);
     return (b->count == *length) ? b : a;
 }
 
+// В обратном порядке список чисел
 Digits* reverseDigits(Digits *digits) {
     Node *head = digits->HEAD;
     Node *new_head = NULL;
@@ -148,14 +161,7 @@ Digits* reverseDigits(Digits *digits) {
     return digits;
 }
 
+//Проверка на пустоту списка цифр
 bool isEmpty(Digits a) {
     return a.count == 0 || a.HEAD == NULL;
-}
-
-void printDigits(Digits a) {
-    Node *HEAD = a.HEAD;
-    while (HEAD) {
-        putchar(HEAD->data);
-        HEAD = HEAD->next;
-    }
 }
